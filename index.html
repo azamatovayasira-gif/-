@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090a12">
+  <title>Физика — жеңил тест</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #090a12;
+      --surface: #11131f;
+      --surface-soft: #171a29;
+      --text: #f5f7ff;
+      --muted: #a4a9bd;
+      --cyan: #54e6f2;
+      --purple: #a879ff;
+      --line: rgba(195, 205, 255, .13);
+      --green: #60e8ad;
+      --red: #ff8296;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      min-width: 320px;
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 12% 2%, rgba(84, 230, 242, .13), transparent 34rem),
+        radial-gradient(ellipse at 92% 18%, rgba(168, 121, 255, .15), transparent 34rem),
+        var(--bg);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+
+    button, input { font: inherit; }
+    button { color: inherit; }
+
+    .page {
+      width: min(100% - 32px, 820px);
+      margin: 0 auto;
+      padding: 48px 0 72px;
+    }
+
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 32px;
+      color: var(--muted);
+      font-size: .82rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text);
+      font-weight: 750;
+      letter-spacing: .02em;
+      text-transform: none;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border: 1px solid rgba(84, 230, 242, .35);
+      border-radius: 11px;
+      color: var(--cyan);
+      background: rgba(84, 230, 242, .08);
+      box-shadow: 0 0 24px rgba(84, 230, 242, .12);
+      font-size: 1.15rem;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(26px, 6vw, 48px);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(22, 27, 44, .96), rgba(15, 16, 27, .93));
+      box-shadow: 0 24px 80px rgba(0, 0, 0, .28);
+      animation: rise-in .7s both;
+    }
+
+    .hero::after {
+      position: absolute;
+      top: -110px;
+      right: -85px;
+      width: 280px;
+      height: 280px;
+      border: 1px solid rgba(168, 121, 255, .18);
+      border-radius: 50%;
+      box-shadow: 0 0 0 34px rgba(168, 121, 255, .035), 0 0 0 70px rgba(84, 230, 242, .025);
+      content: "";
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      color: var(--cyan);
+      font-size: .76rem;
+      font-weight: 750;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 14px var(--cyan);
+      content: "";
+    }
+
+    h1 {
+      max-width: 600px;
+      margin: 0;
+      font-size: clamp(2.2rem, 7vw, 4rem);
+      letter-spacing: -.055em;
+      line-height: 1.06;
+    }
+
+    h1 span {
+      color: transparent;
+      background: linear-gradient(95deg, var(--cyan), #bd94ff 80%);
+      background-clip: text;
+      -webkit-background-clip: text;
+    }
+
+    .intro {
+      max-width: 560px;
+      margin: 18px 0 26px;
+      color: var(--muted);
+      font-size: 1.02rem;
+    }
+
+    .facts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .fact {
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: #d7dbeb;
+      background: rgba(255, 255, 255, .035);
+      font-size: .83rem;
+    }
+
+    .fact strong { color: var(--text); }
+
+    .progress-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 30px 2px 12px;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    .progress-wrap strong { color: var(--text); }
+
+    .progress-track {
+      height: 7px;
+      overflow: hidden;
+      border-radius: 99px;
+      background: #1b1e2c;
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--cyan), var(--purple));
+      box-shadow: 0 0 16px rgba(84, 230, 242, .5);
+      transition: width .35s ease;
+    }
+
+    .quiz { display: grid; gap: 14px; margin-top: 20px; }
+
+    .question {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: linear-gradient(140deg, rgba(20, 22, 35, .97), rgba(15, 16, 26, .97));
+      animation: rise-in .55s both;
+      animation-delay: calc(var(--i) * 35ms);
+      transition: border-color .2s, transform .2s, background .2s;
+    }
+
+    .question:hover { transform: translateY(-2px); border-color: rgba(84, 230, 242, .28); }
+
+    .question-title {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      margin: 0 0 15px;
+      font-size: 1.04rem;
+      font-weight: 700;
+    }
+
+    .number {
+      display: grid;
+      flex: 0 0 29px;
+      height: 29px;
+      place-items: center;
+      border: 1px solid rgba(168, 121, 255, .33);
+      border-radius: 9px;
+      color: #d2baff;
+      background: rgba(168, 121, 255, .09);
+      font-size: .78rem;
+    }
+
+    .options { display: grid; gap: 9px; margin-left: 42px; }
+
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-height: 44px;
+      padding: 9px 12px;
+      border: 1px solid rgba(195, 205, 255, .1);
+      border-radius: 12px;
+      color: #d4d7e5;
+      background: rgba(255, 255, 255, .025);
+      cursor: pointer;
+      transition: border-color .18s, background .18s, color .18s;
+    }
+
+    .option:hover {
+      border-color: rgba(84, 230, 242, .45);
+      color: var(--text);
+      background: rgba(84, 230, 242, .055);
+    }
+
+    .option input {
+      width: 16px;
+      height: 16px;
+      margin: 0;
+      accent-color: var(--cyan);
+      cursor: pointer;
+    }
+
+    .option:has(input:checked) {
+      border-color: rgba(84, 230, 242, .6);
+      color: var(--text);
+      background: rgba(84, 230, 242, .09);
+    }
+
+    .question.correct { border-color: rgba(96, 232, 173, .46); }
+    .question.incorrect { border-color: rgba(255, 130, 150, .4); }
+    .option.answer-correct { border-color: rgba(96, 232, 173, .48); color: var(--green); background: rgba(96, 232, 173, .08); }
+    .option.answer-wrong { border-color: rgba(255, 130, 150, .42); color: var(--red); background: rgba(255, 130, 150, .07); }
+
+    .explanation {
+      display: none;
+      margin: 13px 0 0 42px;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    .question.correct .explanation,
+    .question.incorrect .explanation { display: block; }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 22px;
+    }
+
+    .hint { color: var(--muted); font-size: .85rem; }
+
+    .button {
+      display: inline-flex;
+      min-height: 52px;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 0 23px;
+      border: 0;
+      border-radius: 14px;
+      color: #080b12;
+      background: linear-gradient(100deg, var(--cyan), #9feeff 55%, #c1a0ff);
+      box-shadow: 0 8px 28px rgba(84, 230, 242, .17);
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .18s, box-shadow .18s;
+    }
+
+    .button:hover { transform: translateY(-2px); box-shadow: 0 12px 34px rgba(84, 230, 242, .27); }
+    .button:active { transform: translateY(0); }
+    .button:focus-visible, .option:focus-within { outline: 2px solid white; outline-offset: 3px; }
+
+    .result {
+      display: none;
+      margin-top: 22px;
+      padding: clamp(24px, 5vw, 38px);
+      border: 1px solid rgba(84, 230, 242, .26);
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(23, 31, 48, .98), rgba(24, 19, 40, .98));
+      text-align: center;
+      animation: result-in .6s cubic-bezier(.2, .8, .2, 1) both;
+    }
+
+    .result.visible { display: block; }
+
+    .score {
+      margin: 6px 0;
+      color: transparent;
+      background: linear-gradient(90deg, var(--cyan), #c09aff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      font-size: clamp(3.2rem, 12vw, 5.2rem);
+      font-weight: 850;
+      letter-spacing: -.07em;
+      line-height: 1.1;
+    }
+
+    .result h2 { margin: 6px 0 8px; font-size: 1.45rem; }
+    .result p { margin: 0 0 21px; color: var(--muted); }
+    .result .button { margin: 0 auto; }
+
+    .footer {
+      margin-top: 25px;
+      color: #777d91;
+      font-size: .8rem;
+      text-align: center;
+    }
+
+    @keyframes rise-in {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes result-in {
+      from { opacity: 0; transform: translateY(18px) scale(.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @media (max-width: 560px) {
+      .page { width: min(100% - 22px, 820px); padding-top: 24px; }
+      .topline { margin-bottom: 19px; }
+      .hero { border-radius: 22px; }
+      .question { padding: 17px 14px; border-radius: 16px; }
+      .options, .explanation { margin-left: 0; }
+      .actions { align-items: stretch; flex-direction: column; }
+      .button { width: 100%; }
+      .hint { text-align: center; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="topline">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">ϕ</span> Билим сынагы</div>
+      <span>Физика · 01</span>
+    </div>
+
+    <header class="hero">
+      <div class="eyebrow">Энергиялардын айланышы</div>
+      <h1>Физиканы <span>сынап көр!</span></h1>
+      <p class="intro">15 жеңил суроого жооп бер!</p>
+      <div class="facts" aria-label="Тест тууралуу">
+        <span class="fact"><strong>15</strong> суроо</span>
+        <span class="fact"><strong>2</strong> упай ар бир туура жоопко</span>
+        <span class="fact">Эң көп упай: <strong>30</strong></span>
+      </div>
+    </header>
+
+    <section aria-label="Физика боюнча тест">
+      <div class="progress-wrap">
+        <span>Жооп берилди: <strong id="answered-count">0</strong> / 15</span>
+        <span>Упай: <strong>30</strong></span>
+      </div>
+      <div class="progress-track" role="progressbar" aria-label="Жооп берилген суроолор" aria-valuemin="0" aria-valuemax="15" aria-valuenow="0">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+
+      <form id="quiz-form">
+        <div class="quiz" id="quiz"></div>
+        <div class="actions">
+          <span class="hint">Ар бир суроого бир жооп танда.</span>
+          <button class="button" type="submit">Тестти аяктоо <span aria-hidden="true">→</span></button>
+        </div>
+      </form>
+
+      <section class="result" id="result" aria-live="polite" aria-labelledby="result-title">
+        <div class="eyebrow">Тест аяктады</div>
+        <div class="score" id="score">0/30</div>
+        <h2 id="result-title"></h2>
+        <p id="result-message"></p>
+        <button class="button" id="restart" type="button">Кайра баштоо <span aria-hidden="true">↻</span></button>
+      </section>
+    </section>
+
+    <footer class="footer">Физика✦</footer>
+  </main>
+
+  <script>
+    const questions = [
+      {
+        question: "Энергия деген эмне?",
+        options: ["Жумуш аткаруу жөндөмдүүлүгү", "Дененин массасы", "Дененин көлөмү", "Температура"],
+        answer: 0,
+        explanation: "Энергия — жумуш аткаруу жөндөмдүүлүгү."
+      },
+      {
+        question: "Энергиянын өлчөө бирдиги кайсы?",
+        options: ["Ньютон", "Джоуль", "Ватт", "Метр"],
+        answer: 1,
+        explanation: "Энергия джоуль менен өлчөнөт."
+      },
+      {
+        question: "Кыймылдап жаткан денеде кандай энергия болот?",
+        options: ["Потенциалдык", "Кинетикалык", "Электрдик", "Химиялык"],
+        answer: 1,
+        explanation: "Кыймылдап жаткан денеде кинетикалык энергия болот."
+      },
+      {
+        question: "Бийиктикте турган денеде кандай энергия бар?",
+        options: ["Потенциалдык", "Кинетикалык", "Жылуулук", "Үн"],
+        answer: 0,
+        explanation: "Бийиктикте турган дене потенциалдык энергияга ээ."
+      },
+      {
+        question: "Электр лампасында электр энергиясы эмнеге айланат?",
+        options: ["Үн жана кыймылга", "Жарык жана жылуулукка", "Химиялык энергияга", "Механикалык энергияга"],
+        answer: 1,
+        explanation: "Лампада электр энергиясы жарык жана жылуулук энергиясына айланат."
+      },
+      {
+        question: "Күн энергиясы эмнеге айланат?",
+        options: ["Жарык жана жылуулукка", "Үнгө", "Механикалык энергияга", "Магниттик энергияга"],
+        answer: 0,
+        explanation: "Күн бизге жарык жана жылуулук энергиясын берет."
+      },
+      {
+        question: "Батарейкада кандай энергия сакталат?",
+        options: ["Үн энергиясы", "Химиялык энергия", "Кинетикалык энергия", "Жарык энергиясы"],
+        answer: 1,
+        explanation: "Батарейкада химиялык энергия сакталат."
+      },
+      {
+        question: "Электр кыймылдаткычы электр энергиясын эмнеге айлантат?",
+        options: ["Механикалык энергияга", "Химиялык энергияга", "Жарыкка", "Үнгө"],
+        answer: 0,
+        explanation: "Электр кыймылдаткычы электр энергиясын механикалык энергияга айлантат."
+      },
+      {
+        question: "Отун күйгөндө кандай энергия бөлүнөт?",
+        options: ["Жылуулук энергиясы", "Үн энергиясы", "Магниттик энергия", "Кинетикалык энергия"],
+        answer: 0,
+        explanation: "Отун күйгөндө жылуулук энергиясы бөлүнөт."
+      },
+      {
+        question: "Энергиянын сакталуу мыйзамы эмнени билдирет?",
+        options: ["Энергия жок болот", "Энергия пайда болуп, жоголот", "Энергия жоктон пайда болбойт жана жоголбойт, бир түрдөн экинчи түргө өтөт", "Энергия өзгөрбөйт"],
+        answer: 2,
+        explanation: "Энергия жоктон пайда болбойт жана жоголбойт, болгону бир түрдөн экинчи түргө айланат."
+      },
+      {
+        question: "Шар бийиктен түшкөндө потенциалдык энергиясы эмнеге айланат?",
+        options: ["Кинетикалык энергияга", "Химиялык энергияга", "Электр энергиясына", "Жарык энергиясына"],
+        answer: 0,
+        explanation: "Шар түшкөн сайын анын потенциалдык энергиясы кинетикалык энергияга айланат."
+      },
+      {
+        question: "Үтүктө электр энергиясы эмнеге айланат?",
+        options: ["Үнгө", "Жылуулукка", "Кыймылга", "Жарыкка"],
+        answer: 1,
+        explanation: "Үтүк электр энергиясын жылуулук энергиясына айлантат."
+      },
+      {
+        question: "Адамдын денесинде тамак-аштагы химиялык энергия эмнеге айланат?",
+        options: ["Жылуулук жана механикалык энергияга", "Жарыкка", "Үнгө гана", "Магниттик энергияга"],
+        answer: 0,
+        explanation: "Тамак-аштагы химиялык энергия денеде жылуулук жана механикалык энергияга айланат."
+      },
+      {
+        question: "Гидроэлектр станциясында суунун энергиясы электр энергиясына айланабы?",
+        options: ["Ооба", "Жок"],
+        answer: 0,
+        explanation: "Ооба. Гидроэлектр станциясы суунун энергиясын электр энергиясына айлантат."
+      },
+      {
+        question: "Энергиянын канча негизги түрү бар?",
+        options: ["Бир", "Эки", "Бир нече", "Эч кандай түрү жок"],
+        answer: 2,
+        explanation: "Энергиянын бир нече түрү бар, мисалы кинетикалык, потенциалдык, жылуулук, электрдик жана химиялык."
+      }
+    ];
+
+    const quiz = document.getElementById("quiz");
+    const form = document.getElementById("quiz-form");
+    const result = document.getElementById("result");
+    const progressBar = document.getElementById("progress-bar");
+    const progressTrack = document.querySelector(".progress-track");
+    const answeredCount = document.getElementById("answered-count");
+
+    function renderQuestions() {
+      quiz.innerHTML = questions.map((item, index) => `
+        <article class="question" style="--i:${index}" data-question="${index}">
+          <h2 class="question-title">
+            <span class="number">${String(index + 1).padStart(2, "0")}</span>
+            <span>${item.question}</span>
+          </h2>
+          <div class="options">
+            ${item.options.map((option, optionIndex) => `
+              <label class="option" data-option="${optionIndex}">
+                <input type="radio" name="question-${index}" value="${optionIndex}">
+                <span>${option}</span>
+              </label>
+            `).join("")}
+          </div>
+          <p class="explanation"></p>
+        </article>
+      `).join("");
+    }
+
+    function updateProgress() {
+      const count = questions.reduce((total, _, index) => {
+        return total + (form.querySelector(`input[name="question-${index}"]:checked`) ? 1 : 0);
+      }, 0);
+      answeredCount.textContent = count;
+      progressBar.style.width = `${(count / questions.length) * 100}%`;
+      progressTrack.setAttribute("aria-valuenow", count);
+    }
+
+    quiz.addEventListener("change", updateProgress);
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      let correctCount = 0;
+
+      questions.forEach((item, index) => {
+        const card = quiz.querySelector(`[data-question="${index}"]`);
+        const selected = form.querySelector(`input[name="question-${index}"]:checked`);
+        const selectedIndex = selected ? Number(selected.value) : -1;
+        const isCorrect = selectedIndex === item.answer;
+        const explanation = card.querySelector(".explanation");
+
+        if (isCorrect) correctCount += 1;
+        card.classList.add(isCorrect ? "correct" : "incorrect");
+        explanation.textContent = `${isCorrect ? "Туура!" : "Туура жооп"} ${item.options[item.answer]}. ${item.explanation}`;
+        card.querySelectorAll(".option").forEach((option, optionIndex) => {
+          if (optionIndex === item.answer) option.classList.add("answer-correct");
+          if (optionIndex === selectedIndex && !isCorrect) option.classList.add("answer-wrong");
+        });
+      });
+
+      const points = correctCount * 2;
+      document.getElementById("score").textContent = `${points}/30`;
+      const title = document.getElementById("result-title");
+      const message = document.getElementById("result-message");
+
+      if (points === 0) {
+        title.textContent = "Кринж!";
+        message.textContent = "Физиканы билбейт деле экенсинго.";
+      } else if (points === 30) {
+        title.textContent = "Явно ChatGPT";
+        message.textContent = "Баары туура! молодец.";
+      } else if (points >= 20) {
+        title.textContent = "Краш!";
+        message.textContent = "Жакшы жыйынтык.";
+      } else if (points >= 10) {
+        title.textContent = "Молодец!";
+        message.textContent = "Дагы бир аракет кыл.";
+      } else {
+        title.textContent = "Жаль!";
+        message.textContent = "кайра аракет кыл.";
+      }
+
+      form.querySelectorAll("input").forEach((input) => { input.disabled = true; });
+      form.querySelector(".actions").style.display = "none";
+      result.classList.add("visible");
+      result.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+
+    document.getElementById("restart").addEventListener("click", () => {
+      form.reset();
+      form.querySelectorAll("input").forEach((input) => { input.disabled = false; });
+      form.querySelector(".actions").style.display = "";
+      quiz.querySelectorAll(".question").forEach((card) => {
+        card.classList.remove("correct", "incorrect");
+        card.querySelectorAll(".option").forEach((option) => option.classList.remove("answer-correct", "answer-wrong"));
+        card.querySelector(".explanation").textContent = "";
+      });
+      result.classList.remove("visible");
+      updateProgress();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    renderQuestions();
+  </script>
+</body>
+</html>
